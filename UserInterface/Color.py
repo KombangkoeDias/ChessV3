@@ -1,0 +1,18 @@
+import enum
+
+white = (255, 255, 255)
+green = (0, 255, 0)
+blue = (0, 0, 128)
+red = (128, 0, 0)
+darkred = (150,0,0)
+black = (0, 0, 0)
+gold = (255, 215, 0)
+vegasgold = (197, 179, 88)
+tomago = (255, 99, 71)
+darkgreen = (0, 100, 0)
+yellow = (255, 255, 0)
+orange = (255, 165, 0)
+purple = (128, 0, 128)
+lightblue = (173, 216, 230)
+lightSquare = (232, 235, 239)
+darkSquare = (125,135,150)
