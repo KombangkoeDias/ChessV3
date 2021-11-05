@@ -36,6 +36,7 @@ class Board:
         self.promotion = False
         self.promotionHandler = PromotionHandler(self,self.screen)
         self.DrawHandler = DrawHandler(self)
+        self.PlayerSide = PlayerSide
         if(GameMode == mode.TwoPlayer):
             self.currentSide = side.whiteside
         else:
@@ -143,27 +144,50 @@ class Board:
         according to the piece location and image file in Square list)
         """
 
-        for i in range(8):
-            for j in range(8):
-                if (len(self.clicklist) > 0 and (i,j) == self.findIJSquare(self.clicklist[0])):
-                    self.getSquare(i, j).drawSquare(self.screen,select=True,eat=False,check=False)
-                elif (self.whiteischecked and self.getSquare(i,j).Piece.type == type.KingW):
-                    self.getSquare(i,j).drawSquare(self.screen,select=False,eat=False,check=True) # draw purple squares for king if checked
-                elif (self.blackischecked and self.getSquare(i,j).Piece.type == type.KingB):
-                    self.getSquare(i,j).drawSquare(self.screen,select=False,eat=False,check=True) # draw purple squares for king if checked
-                else:
-                    self.getSquare(i,j).drawSquare(self.screen,select=False,eat=False,check=False)
+        if self.PlayerSide == side.whiteside or self.GameMode == mode.TwoPlayer:
+            for i in range(8):
+                for j in range(8):
+                    if (len(self.clicklist) > 0 and (i,j) == self.findIJSquare(self.clicklist[0])):
+                        self.getSquare(i, j).drawSquare(self.screen,select=True,eat=False,check=False)
+                    elif (self.whiteischecked and self.getSquare(i,j).Piece.type == type.KingW):
+                        self.getSquare(i,j).drawSquare(self.screen,select=False,eat=False,check=True) # draw purple squares for king if checked
+                    elif (self.blackischecked and self.getSquare(i,j).Piece.type == type.KingB):
+                        self.getSquare(i,j).drawSquare(self.screen,select=False,eat=False,check=True) # draw purple squares for king if checked
+                    else:
+                        self.getSquare(i,j).drawSquare(self.screen,select=False,eat=False,check=False)
 
-        for walkSquare in self.possibleWalks: # for possible walks draw green dots.
-            pygame.draw.circle(self.screen, green, (walkSquare.x + 35, walkSquare.y + 35), 7)
-        for eatSquare in self.possibleEats:
-            eatSquare.drawSquare(self.screen,select=False,eat=True,check=False)
+            for walkSquare in self.possibleWalks: # for possible walks draw green dots.
+                pygame.draw.circle(self.screen, green, (walkSquare.x + 35, walkSquare.y + 35), 7)
+            for eatSquare in self.possibleEats:
+                eatSquare.drawSquare(self.screen,select=False,eat=True,check=False)
 
-        for i in range(8):
-            for j in range(8):
-                if (self.getSquare(i,j).Piece.type != type.Empty): # pieces are drawn after all squares are drawn
-                    self.getSquare(i,j).Piece.drawPieces(self.screen,self.getSquare(i,j))
+            for i in range(8):
+                for j in range(8):
+                    if (self.getSquare(i,j).Piece.type != type.Empty): # pieces are drawn after all squares are drawn
+                        self.getSquare(i,j).Piece.drawPieces(self.screen,self.getSquare(i,j))
+        else:
+            for i in range(8):
+                for j in range(8):
+                    if (len(self.clicklist) > 0 and (i, j) == self.findIJSquare(self.clicklist[0])):
+                        self.getSquare(i, j).drawSquare(self.screen, select=True, eat=False, check=False)
+                    elif (self.whiteischecked and self.getSquare(i, j).Piece.type == type.KingW):
+                        self.getSquare(i, j).drawSquare(self.screen, select=False, eat=False,
+                                                        check=True)  # draw purple squares for king if checked
+                    elif (self.blackischecked and self.getSquare(i, j).Piece.type == type.KingB):
+                        self.getSquare(i, j).drawSquare(self.screen, select=False, eat=False,
+                                                        check=True)  # draw purple squares for king if checked
+                    else:
+                        self.getSquare(i, j).drawSquare(self.screen, select=False, eat=False, check=False)
 
+            for walkSquare in self.possibleWalks:  # for possible walks draw green dots.
+                pygame.draw.circle(self.screen, green, (walkSquare.x + 35, walkSquare.y + 35), 7)
+            for eatSquare in self.possibleEats:
+                eatSquare.drawSquare(self.screen, select=False, eat=True, check=False)
+
+            for i in range(8):
+                for j in range(8):
+                    if (self.getSquare(i, j).Piece.type != type.Empty):  # pieces are drawn after all squares are drawn
+                        self.getSquare(i, j).Piece.drawPieces(self.screen, self.getSquare(i, j))
     def getSquare(self,i,j):
         """ return the square at position (i,j) """
         return self.Squarelist[i][j]

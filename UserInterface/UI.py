@@ -8,6 +8,8 @@ from Mode import mode
 from side import side
 import os
 import threading
+from type import type
+
 
 pygame.init() # initiate the pygame library
 
@@ -106,6 +108,31 @@ def start_game():
     if(Gamemode != mode.TwoPlayer):
         print("Player chosen side:", PlayerSide)
     ChessBoard = Board(screen,Gamemode,mainMenu,PlayerSide)
+    screen.blit(GameplayBackground.image, GameplayBackground.rect)
+    print(PlayerSide == side.blackside)
+    if Gamemode != mode.TwoPlayer and PlayerSide == side.blackside:
+        print('in1')
+        if Gamemode == mode.OnePlayerAlphaBeta:
+            print("in2")
+        elif Gamemode == mode.OnePlayerAI:
+            print("in3")
+            ChessBoard.drawBoardAndPieces()
+            firstSquare, secondSquare = ChessBoard.opponentMovesEngine.findBestMove(
+                ChessBoard.stockfishIntegrationEngine.chessboard, side.whiteside)
+            ChessBoard.clicklist.append(firstSquare)
+            ChessBoard.clicklist.append(secondSquare)
+            enpassant = ChessBoard.clicklist[1] in ChessBoard.possibleEats and ChessBoard.clicklist[
+                1].Piece.type == type.Empty
+
+            # for the castling to be true the move should be of king and it shouldn't be adjacent to the original square
+            firstRow, firstCol = ChessBoard.findIJSquare(ChessBoard.clicklist[0])
+            secondRow, secondCol = ChessBoard.findIJSquare(ChessBoard.clicklist[1])
+            print(firstRow, firstCol, secondRow, secondCol)
+            castling = (ChessBoard.clicklist[0].Piece.type == type.KingW or ChessBoard.clicklist[
+                0].Piece.type == type.KingB) \
+                       and abs(secondCol - firstCol) == 2
+            ChessBoard.walkOrEat(enpassant, castling)
+            ChessBoard.clicklist.clear()
 
     while gamePlay:
         screen.blit(GameplayBackground.image, GameplayBackground.rect)
