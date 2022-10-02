@@ -150,4 +150,3 @@ def start_game():
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-mainMenu()
